@@ -170,6 +170,7 @@ func (t Task) execute() {
 			baselineResponse = response
 		} else {
 			baselineResponse, err = sendRequest(t.UrlInjection.BaselineUrl)
+			// fmt.Println(baselineResponse)
 			if err != nil {
 				failedRequestsSent += 1
 				if opts.Debug {

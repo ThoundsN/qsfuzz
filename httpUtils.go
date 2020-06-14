@@ -6,6 +6,7 @@ import (
 	"net"
 	"net/http"
 	"time"
+	// "fmt"
 
 	"github.com/EDDYCJY/fake-useragent"
 )
@@ -23,12 +24,16 @@ func createClient() {
 	httpClient := &http.Client{
 		Transport: transport,
 		Timeout:   time.Duration(opts.Timeout+3) * time.Second,
+		CheckRedirect: func(req *http.Request, via []*http.Request) error {
+			return http.ErrUseLastResponse
+		},
 	}
 	config.httpClient = httpClient
 }
 
 func sendRequest(u string) (Response, error) {
 	response := Response{}
+
 
 	request, err := http.NewRequest("GET", u, nil)
 	if err != nil {
@@ -46,7 +51,12 @@ func sendRequest(u string) (Response, error) {
 	request.Header.Add("Cookie", config.Cookies)
 
 	resp, err := config.httpClient.Do(request)
+	// fmt.Println(request)
 
+	// fmt.Println(resp)
+	// fmt.Println("\n\n")
+
+	
 	if err != nil {
 		return response, err
 	}
